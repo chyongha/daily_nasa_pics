@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for
 import requests
 from flask_sqlalchemy import SQLAlchemy
 import os 
@@ -26,7 +26,7 @@ class Nasa(db.Model):
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():
-    wanted_date = '2024-12-31'
+    wanted_date = '1995-06-16'
     if request.method == 'POST':
         new_date = request.form.get('date')
 
