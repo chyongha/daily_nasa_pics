@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Check out daily pictures from NASA!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.0/css/bulma.min.css" />
+</head>
+
+<body>
+    <section class="hero is-info">
+        <div class="hero-body">
+            <div class="container">
+                <article class="media">
+                    <div class="media-left">
+                        <figure class="image is-96x96">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/NASA_logo.svg" alt="NASA Logo">
+                        </figure>
+                    </div>
+                    <div class="media-content">
+                        <h1 class="title">Check out daily pictures from NASA!</h1>
+                        <h2 class="subtitle">Every day, new pictures</h2>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div class="hero-foot">
+            <nav class="tabs is-boxed is-fullwidth">
+                <div class="container">
+                    <ul>
+                        <li>
+                            <a href="{{ url_for('index') }}">
+                                <span>Search Photos</span>
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="{{ url_for('favorites') }}">
+                                <span>My Collection</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        </section>
+
+    {% block content %}
+
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-offset-4 is-4">
+                    <form method="POST">
+                        <div class="field has-addons">
+                            <div class="control is-expanded">
+                                <input class="input" name="date" type="date">
+                            </div>
+                            <div class="control">
+                                <button class="button is-dark">
+                                    Get Photo
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered"> <div class="column is-8">
+                {% for pic in pic_data %}              
+                    {% if apod_data %}
+                    <div class="card">
+                        <div class="card-image">
+                            <figure class="image">
+                                <img src="{{ pic.image }}" alt="NASA Photo">
+                            </figure>
+                        </div>
+                        <div class="card-content">
+                            <div class="media">
+                                <div class="media-content">
+                                    <p class="title is-4">{{ pic.title }}</p>
+                                    <p class="date is-6">{{pic.date}}</p>
+                                </div>
+                            </div>
+
+                            <div class="content">
+                                {{ pic.description }}
+                                <br><br>
+                                {% if pic.copyright %}
+                                    <small><strong>Copyright:</strong> {{ pic.copyright }}</small>
+                                {% endif %}
+
+                                <br>
+                                <form action="/save" method="POST">
+                                    <input type="hidden" name="title" value="{{ pic.title }}">
+                                    <input type="hidden" name="date" value="{{ pic.date }}">
+                                    <input type="hidden" name="url" value="{{ pic.image }}">
+                                    <input type="hidden" name="description" value="{{ pic.description }}">
+                                    
+                                    <button type="submit" class="button is-success is-light">
+                                        Save to Favorites
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% endblock %}
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+                Powered by <a href="https://api.nasa.gov/">NASA API</a>.
+            </p>
+        </div>
+    </footer>
+</body>
+
+</html>
